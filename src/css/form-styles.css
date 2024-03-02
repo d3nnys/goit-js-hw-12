@@ -138,7 +138,6 @@
   border-style: dashed solid solid dotted;
   border-color: #ff3d00 #ff3d00 transparent #ff3d00;
   border-radius: 50%;
-  /* display: inline-block; */
   position: relative;
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
