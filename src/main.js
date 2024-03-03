@@ -31,6 +31,9 @@ async function checkForSending(event) {
 
   searchQuery = refs.form.elements.query.value.trim();
 
+  currentPage = 1;
+  refs.gallery.innerHTML = '';
+
   if (searchQuery === '') {
     iziToast.warning({
       message: 'Please enter a search query.',
@@ -47,14 +50,7 @@ async function checkForSending(event) {
 
   showLoader();
 
-  await buildUrl(searchQuery, currentPage)
-    .then(data => {
-      if (data && data.hits && data.hits.length > 0) {
-        return data;
-      } else if (data.hits.length < 15) {
-        hideBtn();
-      }
-    })
+  buildUrl(searchQuery, currentPage)
     .then(data => {
       const images = data.hits;
 
@@ -91,56 +87,56 @@ async function checkForSending(event) {
 
 refs.form.addEventListener('submit', checkForSending);
 refs.loadMoreBtn.addEventListener('click', async () => {
-  await buildUrl(searchQuery, currentPage)
-    .then(res => {
-      currentPage++;
+  try {
+    showLoader();
 
-      showLoader();
-      refs.gallery.insertAdjacentHTML('beforeend', renderGallery(res.hits));
+    const res = await buildUrl(searchQuery, ++currentPage);
 
-      lightbox.refresh();
+    refs.gallery.insertAdjacentHTML('beforeend', renderGallery(res.hits));
 
-      if (res.hits.length < 15) {
-        hideBtn();
+    lightbox.refresh();
 
-        iziToast.info({
-          theme: 'dark',
-          message: "We're sorry, but you've reached the end of search results.",
-          messageColor: '#ffffff',
-          backgroundColor: '#1f79ff',
-          position: 'topRight',
-          pauseOnHover: false,
-          progressBarColor: 'black',
-          timeout: 3000,
-        });
-      }
+    if (res.hits.length < 15) {
+      hideBtn();
 
-      const itemHeight = document
-        .querySelector('.gallery-item')
-        .getBoundingClientRect().height;
-
-      window.scrollTo({
-        top: itemHeight * 2 + window.pageYOffset,
-        behavior: 'smooth',
-      });
-    })
-    .catch(error =>
-      iziToast.error({
+      iziToast.info({
         theme: 'dark',
-        message:
-          'Sorry, there are no images matching your search query. Please try again!',
+        message: "We're sorry, but you've reached the end of search results.",
         messageColor: '#ffffff',
-        backgroundColor: '#ef4040',
+        backgroundColor: '#1f79ff',
         position: 'topRight',
-        iconUrl: Error,
         pauseOnHover: false,
-        progressBarColor: '#b51b1b',
+        progressBarColor: 'black',
         timeout: 3000,
-      })
-    )
-    .finally(() => {
-      hideLoader();
+      });
+    }
+
+    const itemHeight = document
+      .querySelector('.gallery-item')
+      .getBoundingClientRect().height;
+
+    window.scrollTo({
+      top: itemHeight * 2 + window.pageYOffset,
+      behavior: 'smooth',
     });
+
+    // ++currentPage;
+  } catch {
+    iziToast.error({
+      theme: 'dark',
+      message:
+        'Sorry, there are no images matching your search query. Please try again!',
+      messageColor: '#ffffff',
+      backgroundColor: '#ef4040',
+      position: 'topRight',
+      iconUrl: Error,
+      pauseOnHover: false,
+      progressBarColor: '#b51b1b',
+      timeout: 3000,
+    });
+  } finally {
+    hideLoader();
+  }
 });
 
 function showBtn() {
