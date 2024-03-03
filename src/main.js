@@ -119,8 +119,6 @@ refs.loadMoreBtn.addEventListener('click', async () => {
       top: itemHeight * 2 + window.pageYOffset,
       behavior: 'smooth',
     });
-
-    // ++currentPage;
   } catch {
     iziToast.error({
       theme: 'dark',
