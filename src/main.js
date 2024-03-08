@@ -56,11 +56,7 @@ async function checkForSending(event) {
 
       refs.gallery.innerHTML = renderGallery(images);
 
-      if (images.length < 15) {
-        hideBtn();
-      } else {
-        showBtn();
-      }
+      images.length < 15 ? hideBtn() : showBtn();
 
       lightbox.refresh();
     })
@@ -119,19 +115,8 @@ refs.loadMoreBtn.addEventListener('click', async () => {
       top: itemHeight * 2 + window.pageYOffset,
       behavior: 'smooth',
     });
-  } catch {
-    iziToast.error({
-      theme: 'dark',
-      message:
-        'Sorry, there are no images matching your search query. Please try again!',
-      messageColor: '#ffffff',
-      backgroundColor: '#ef4040',
-      position: 'topRight',
-      iconUrl: Error,
-      pauseOnHover: false,
-      progressBarColor: '#b51b1b',
-      timeout: 3000,
-    });
+  } catch (error) {
+    throw new Error(error.status);
   } finally {
     hideLoader();
   }
