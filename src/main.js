@@ -109,8 +109,8 @@ refs.loadMoreBtn.addEventListener('click', async () => {
       .querySelector('.gallery-item')
       .getBoundingClientRect().height;
 
-    window.scrollTo({
-      top: itemHeight * 2 + window.scrollY,
+    window.scrollBy({
+      top: itemHeight * 2.1,
       behavior: 'smooth',
     });
   } catch (error) {
