@@ -86,15 +86,14 @@ refs.loadMoreBtn.addEventListener('click', async () => {
 
     const res = await buildUrl(searchQuery, ++currentPage);
 
-    const listItems = document.querySelectorAll('.gallery-item');
-    const listItemsLength = listItems.length;
+    const listItems = document.querySelectorAll('.gallery-item').length;
 
     refs.gallery.insertAdjacentHTML('beforeend', renderGallery(res.hits));
 
     const newItems = document.querySelectorAll('.gallery-item');
 
-    if (newItems.length > listItemsLength) {
-      const newlyItems = newItems[listItemsLength];
+    if (newItems.length > listItems) {
+      const newlyItems = newItems[listItems];
 
       newlyItems.scrollIntoView({
         block: 'start',
