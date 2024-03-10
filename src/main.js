@@ -86,7 +86,21 @@ refs.loadMoreBtn.addEventListener('click', async () => {
 
     const res = await buildUrl(searchQuery, ++currentPage);
 
+    const listItems = document.querySelectorAll('.gallery-item');
+    const listItemsLength = listItems.length;
+
     refs.gallery.insertAdjacentHTML('beforeend', renderGallery(res.hits));
+
+    const newItems = document.querySelectorAll('.gallery-item');
+
+    if (newItems.length > listItemsLength) {
+      const newlyItems = newItems[listItemsLength];
+
+      newlyItems.scrollIntoView({
+        block: 'start',
+        behavior: 'smooth',
+      });
+    }
 
     lightbox.refresh();
 
@@ -104,15 +118,6 @@ refs.loadMoreBtn.addEventListener('click', async () => {
         timeout: 3000,
       });
     }
-
-    const itemHeight = document
-      .querySelector('.gallery-item')
-      .getBoundingClientRect().height;
-
-    window.scrollBy({
-      top: itemHeight * 2.1,
-      behavior: 'smooth',
-    });
   } catch (error) {
     throw new Error(error.status);
   } finally {

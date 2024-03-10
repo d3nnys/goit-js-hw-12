@@ -73,7 +73,6 @@
 
 @media screen and (min-width: 768px) {
   .gallery {
-    display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
   }
@@ -81,9 +80,7 @@
 
 @media screen and (min-width: 1158px) {
   .gallery {
-    display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
   }
 }
 
