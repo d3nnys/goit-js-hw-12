@@ -35,6 +35,8 @@ async function fetchRequest(event) {
   refs.gallery.innerHTML = '';
 
   if (searchQuery === '') {
+    hideBtn();
+
     iziToast.warning({
       message: 'Please enter a search query.',
       messageColor: 'black',
