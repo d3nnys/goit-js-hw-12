@@ -52,9 +52,28 @@ async function fetchRequest(event) {
 
   showLoader();
 
-  const data = await buildUrl(searchQuery, currentPage);
   try {
+    const data = await buildUrl(searchQuery, currentPage);
     const images = data.hits;
+
+    if (images.length === 0) {
+      hideBtn();
+
+      iziToast.error({
+        theme: 'dark',
+        message:
+          'Sorry, there are no images matching your search query. Please try again!',
+        messageColor: '#ffffff',
+        backgroundColor: '#ef4040',
+        position: 'topRight',
+        iconUrl: Error,
+        pauseOnHover: false,
+        progressBarColor: '#b51b1b',
+        timeout: 3000,
+      });
+
+      return;
+    }
 
     refs.gallery.innerHTML = renderGallery(images);
 
